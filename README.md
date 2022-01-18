@@ -3,8 +3,8 @@
 - Read [the guideline](https://github.com/mate-academy/py-task-guideline/blob/main/README.md) before start
 
 
-You have a list of dicts `people`, every dict mean a 
-**person**, it has keys: `name`, `age`, 
+You have a list of dicts `people`, every dict means
+a **person**, it has keys: `name`, `age`, 
 `wife`/`husband` - depends on person is male or 
 female. All `names` are different. Key 
 `wife`/`husband` can be either `None` or 
@@ -17,14 +17,14 @@ This class also should have a class attribute
 instances by their `name`. Constructor should 
 add elements to this attribute.
 
-Write function `make_a_person`, this function
+Write function `create_person_list`, this function
 takes list `people` and return list with
 `Person` instances instead of dicts.
 
 **Note:**
 
 If **person's** key `wife`/`husband` is not 
-`None` - `make_a_person` should add 
+`None` - `create_person_list` should add 
 attribute `wife`/`husband` respectively
 to its instance. This attribute should
 be a link to a `Person` instance with `name` the
@@ -39,7 +39,7 @@ people = [
     {'name': 'Rachel', 'age': 28, 'husband': 'Ross'}
 ]
 
-person_list = make_a_person(people) 
+person_list = create_person_list(people) 
 person_list[0] == <__main__.Person object at 0x10de3ab80>
 person_list[0].name == 'Ross'
 person_list[0].wife == <__main__.Person object at 0x10253167> 
@@ -49,11 +49,12 @@ person_list[1].name == 'Joey'
 person_list[1].wife
 # AttributeError
 
+person_list[2] == <__main__.Person object at 0x10253167> 
 person_list[2].name == 'Rachel'
 person_list[2].husband == <__main__.Person object at 0x10de3ab80>
 # The same as person_list[0]
 person_list[2].husband.name == 'Ross'
-person_list[2].husband.wife is person_list[2]
+person_list[2].husband.wife is person_list[2]  # True
 
 Person.people == {
     'Ross': <__main__.Person object at 0x10c20ca60>,

@@ -1,7 +1,24 @@
 import pytest
 
-from app.main import make_a_person
+from app.main import create_person_list
 from app.main import Person
+
+
+@pytest.fixture()
+def people_data():
+    return [
+        {"name": "Ross", "age": 30, "wife": "Rachel"},
+        {"name": "Joey", "age": 29, "wife": None},
+        {"name": "Phoebe", "age": 31, "husband": None},
+        {"name": "Chandler", "age": 30, "wife": "Monica"},
+        {"name": "Monica", "age": 32, "husband": "Chandler"},
+        {"name": "Rachel", "age": 28, "husband": "Ross"},
+    ]
+
+
+@pytest.fixture()
+def created_person_list(people_data):
+    return create_person_list(people_data)
 
 
 def test_person_class_attribute_people_exists():
@@ -14,123 +31,68 @@ def test_person_class_attribute_people_exists():
 
 
 @pytest.mark.parametrize(
-    'person,name,age',
+    'name,age',
     [
-        ({'name': 'Ross', 'age': 30, 'wife': 'Rachel'}, 'Ross', 30),
-        ({'name': 'Joey', 'age': 29, 'wife': None}, 'Joey', 29)
+        ('Ross', 30),
+        ('Joey', 29)
     ]
 )
-def test_person_class_name_age(person, name, age):
-    person_inst = Person(person['name'], person['age'])
+def test_person_class_name_age(name, age):
+    person_inst = Person(name, age)
     assert person_inst.name == name, (
-        f"Attribute 'name' for Person instance for {person} "
-        f"should equal to {name}"
+        "Person instance should have attribute 'name'"
     )
     assert person_inst.age == age, (
-        f"Attribute 'age' for Person instance for {person} "
-        f"should equal to {age}"
+        "Person instance should have attribute 'age'"
     )
 
 
-def test_make_a_person_all_persons():
-    people = [
-        {'name': 'Ross', 'age': 30, 'wife': 'Rachel'},
-        {'name': 'Joey', 'age': 29, 'wife': None},
-        {'name': 'Phoebe', 'age': 31, 'husband': None},
-        {'name': 'Chandler', 'age': 30, 'wife': 'Monica'},
-        {'name': 'Monica', 'age': 32, 'husband': 'Chandler'},
-        {'name': 'Rachel', 'age': 28, 'husband': 'Ross'},
-    ]
-    person_list = make_a_person(people)
-    assert all(isinstance(person, Person) for person in person_list), (
-        "All elements in result of 'make_a_person' should be instance "
+def test_create_person_list_all_persons(people_data, created_person_list):
+
+    assert all(isinstance(person, Person) for person in created_person_list), (
+        "All elements in result of 'create_person_list' should be instance "
         "of Person class"
     )
-    assert len(person_list) == len(people), (
+    assert len(created_person_list) == len(people_data), (
         "Length of initial list should equal to length of function result"
     )
 
 
-def test_make_a_person_order():
-    people = [
-        {'name': 'Ross', 'age': 30, 'wife': 'Rachel'},
-        {'name': 'Joey', 'age': 29, 'wife': None},
-        {'name': 'Phoebe', 'age': 31, 'husband': None},
-        {'name': 'Chandler', 'age': 30, 'wife': 'Monica'},
-        {'name': 'Monica', 'age': 32, 'husband': 'Chandler'},
-        {'name': 'Rachel', 'age': 28, 'husband': 'Ross'},
-    ]
-    person_list = make_a_person(people)
-    assert [person_dict['name'] for person_dict in people] == [person.name for person in person_list], (
+def test_create_person_list_order(people_data, created_person_list):
+   assert [person_dict['name'] for person_dict in people_data] == [
+       person.name for person in created_person_list
+   ], (
         "Order in function result should be the same"
     )
 
 
-def test_make_a_person_has_wife():
-    people = [
-        {'name': 'Ross', 'age': 30, 'wife': 'Rachel'},
-        {'name': 'Joey', 'age': 29, 'wife': None},
-        {'name': 'Phoebe', 'age': 31, 'husband': None},
-        {'name': 'Chandler', 'age': 30, 'wife': 'Monica'},
-        {'name': 'Monica', 'age': 32, 'husband': 'Chandler'},
-        {'name': 'Rachel', 'age': 28, 'husband': 'Ross'},
-    ]
-    person_list = make_a_person(people)
-    assert hasattr(person_list[0], 'wife'), (
-        f"For 'people' equals to {people} "
-        f"Person with 'name' {person_list[0].name} should have "
-        f"attribute 'wife' with name {person_list[0].wife.name}"
+def test_create_person_list_has_wife(people_data, created_person_list):
+    assert hasattr(created_person_list[0], 'wife'), (
+        f"Person with 'name' {created_person_list[0].name} should have "
+        f"attribute 'wife' with name {people_data[0].wife.name}"
     )
 
 
-def test_make_a_person_has_wife_and_wife_have_husband():
-    people = [
-        {'name': 'Ross', 'age': 30, 'wife': 'Rachel'},
-        {'name': 'Joey', 'age': 29, 'wife': None},
-        {'name': 'Phoebe', 'age': 31, 'husband': None},
-        {'name': 'Chandler', 'age': 30, 'wife': 'Monica'},
-        {'name': 'Monica', 'age': 32, 'husband': 'Chandler'},
-        {'name': 'Rachel', 'age': 28, 'husband': 'Ross'},
-    ]
-    person_list = make_a_person(people)
-    assert hasattr(person_list[0], 'wife') and person_list[0].wife.husband == person_list[0], (
-        f"For 'people' equals to {people} "
-        f"Person with 'name' {person_list[0].name} should have "
-        f"attribute 'wife' with name {person_list[0].wife.name} and "
+def test_create_person_list_has_wife_and_wife_have_husband(people_data, created_person_list):
+    assert hasattr(created_person_list[0], 'wife') and \
+           created_person_list[0].wife.husband == created_person_list[0], (
+        f"Person with 'name' {created_person_list[0].name} should have "
+        f"attribute 'wife' with name {created_person_list[0].wife.name} and "
         f"Person.wife.husband should links to that Person"
     )
 
 
-def test_make_a_person_has_no_wife():
-    people = [
-        {'name': 'Ross', 'age': 30, 'wife': 'Rachel'},
-        {'name': 'Joey', 'age': 29, 'wife': None},
-        {'name': 'Phoebe', 'age': 31, 'husband': None},
-        {'name': 'Chandler', 'age': 30, 'wife': 'Monica'},
-        {'name': 'Monica', 'age': 32, 'husband': 'Chandler'},
-        {'name': 'Rachel', 'age': 28, 'husband': 'Ross'},
-    ]
-    person_list = make_a_person(people)
-    assert hasattr(person_list[1], 'wife') is False, (
-        f"For 'people' equals to {people} "
-        f"Person with 'name' {person_list[1].name} should not have "
+def test_create_person_list_has_no_wife(people_data, created_person_list):
+    assert hasattr(created_person_list[1], 'wife') is False, (
+        f"Person with 'name' {created_person_list[1].name} should not have "
         f"attribute wife"
     )
 
 
-def test_person_class_attribute_people():
-    people = [
-        {'name': 'Ross', 'age': 30, 'wife': 'Rachel'},
-        {'name': 'Joey', 'age': 29, 'wife': None},
-        {'name': 'Phoebe', 'age': 31, 'husband': None},
-        {'name': 'Chandler', 'age': 30, 'wife': 'Monica'},
-        {'name': 'Monica', 'age': 32, 'husband': 'Chandler'},
-        {'name': 'Rachel', 'age': 28, 'husband': 'Ross'},
-    ]
-    person_list = make_a_person(people)
+def test_person_class_attribute_people(people_data, created_person_list):
     assert all(isinstance(person, Person) for person in Person.people.values()), (
         "All elements of Person class attribute 'people' should be Person instances"
     )
-    assert len(Person.people) == len(people), (
+    assert len(Person.people) == len(people_data), (
         "Length of Person class attribute people should be equal to length of initial list"
     )

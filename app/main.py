@@ -3,6 +3,6 @@ class Person:
     pass
 
 
-def make_a_person(people: list) -> list:
+def create_person_list(people: list) -> list:
     # write your code here
     pass
