@@ -3,8 +3,16 @@ import pytest
 # from app.main import make_a_person
 # from app.main import Person
 
-from app.reference import make_a_person
-from app.reference import Person
+from app.reference_person_class import make_a_person
+from app.reference_person_class import Person
+
+def test_person_class_attribute_people_exists():
+    assert hasattr(Person, 'people'), (
+        "Class Person should have class attribute 'people'"
+    )
+    assert len(Person.people) == 0, (
+        "Initial length of 'Person.people' should equal to 0"
+    )
 
 @pytest.mark.parametrize(
     'person,name,age',
@@ -40,6 +48,9 @@ def test_make_a_person_all_persons():
         "All elements in result of 'make_a_person' should be instance "
         "of Person class"
     )
+    assert len(person_list) == 6, (
+        "Length of initial list should equal to length of function result"
+    )
 
 
 def test_make_a_person_order():
@@ -52,10 +63,10 @@ def test_make_a_person_order():
         {'name': 'Rachel', 'age': 28, 'husband': 'Ross'},
     ]
     person_list = make_a_person(people)
-    for i in range(len(people)):
-        assert people[i]['name'] == person_list[i].name and people[i]['age'] == person_list[i].age, (
-            "Order in function result should be the"
-        )
+    assert [person_dict['name'] for person_dict in people] == [person.name for person in person_list], (
+        "Order in function result should be the same"
+    )
+
 
 def test_make_a_person_has_wife():
     people = [
@@ -108,3 +119,20 @@ def test_make_a_person_has_no_wife():
         f"attribute wife"
     )
 
+
+def test_person_class_attribute_people():
+    people = [
+        {'name': 'Ross', 'age': 30, 'wife': 'Rachel'},
+        {'name': 'Joey', 'age': 29, 'wife': None},
+        {'name': 'Phoebe', 'age': 31, 'husband': None},
+        {'name': 'Chandler', 'age': 30, 'wife': 'Monica'},
+        {'name': 'Monica', 'age': 32, 'husband': 'Chandler'},
+        {'name': 'Rachel', 'age': 28, 'husband': 'Ross'},
+    ]
+    person_list = make_a_person(people)
+    assert all(isinstance(person, Person) for person in Person.people.values()), (
+        "All elements of Person class attribute 'people' should be Person instances"
+    )
+    assert len(Person.people) == len(people), (
+        "Length of Person class attribute people should be equal to length of initial list"
+    )

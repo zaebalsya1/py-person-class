@@ -13,7 +13,7 @@ name of another person.
 Create class `Person`. It's constructor takes
 and store `name`, `age` of a person.
 This class also should have a class attribute
-`people`, it is dict that stores `Person` 
+`people`, it is a dict that stores `Person` 
 instances by their `name`. Constructor should 
 add elements to this attribute.
 
@@ -27,7 +27,7 @@ If **person's** key `wife`/`husband` is not
 `None` - `make_a_person` should add 
 attribute `wife`/`husband` respectively
 to its instance. This attribute should
-be a link to `Person` instance with `name` the
+be a link to a `Person` instance with `name` the
 same as `wife`/`husband` key in person's dict.
 
 
@@ -43,7 +43,7 @@ person_list = make_a_person(people)
 person_list[0] == <__main__.Person object at 0x10de3ab80>
 person_list[0].name == 'Ross'
 person_list[0].wife == <__main__.Person object at 0x10253167> 
-person_list[0].wife.name = 'Rachel'
+person_list[0].wife.name == 'Rachel'
 
 person_list[1].name == 'Joey'
 person_list[1].wife
@@ -53,11 +53,11 @@ person_list[2].name == 'Rachel'
 person_list[2].husband == <__main__.Person object at 0x10de3ab80>
 # The same as person_list[0]
 person_list[2].husband.name == 'Ross'
-person_list[2].husband.wife == person_list[2]
+person_list[2].husband.wife is person_list[2]
 
-Person.people == [
-    {'Ross': <__main__.Person object at 0x10c20ca60>}
-    {'Joey': <__main__.Person object at 0x10c180a00>}
-    {'Rachel': <__main__.Person object at 0x10c1804f0>}
-]
+Person.people == {
+    'Ross': <__main__.Person object at 0x10c20ca60>,
+    'Joey': <__main__.Person object at 0x10c180a00>,
+    'Rachel': <__main__.Person object at 0x10c1804f0>
+}
 ```
