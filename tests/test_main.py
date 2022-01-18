@@ -1,10 +1,8 @@
 import pytest
 
-# from app.main import make_a_person
-# from app.main import Person
+from app.main import make_a_person
+from app.main import Person
 
-from app.reference_person_class import make_a_person
-from app.reference_person_class import Person
 
 def test_person_class_attribute_people_exists():
     assert hasattr(Person, 'people'), (
@@ -14,10 +12,10 @@ def test_person_class_attribute_people_exists():
         "Initial length of 'Person.people' should equal to 0"
     )
 
+
 @pytest.mark.parametrize(
     'person,name,age',
     [
-
         ({'name': 'Ross', 'age': 30, 'wife': 'Rachel'}, 'Ross', 30),
         ({'name': 'Joey', 'age': 29, 'wife': None}, 'Joey', 29)
     ]
@@ -44,11 +42,11 @@ def test_make_a_person_all_persons():
         {'name': 'Rachel', 'age': 28, 'husband': 'Ross'},
     ]
     person_list = make_a_person(people)
-    assert all(isinstance(i, Person) for i in person_list), (
+    assert all(isinstance(person, Person) for person in person_list), (
         "All elements in result of 'make_a_person' should be instance "
         "of Person class"
     )
-    assert len(person_list) == 6, (
+    assert len(person_list) == len(people), (
         "Length of initial list should equal to length of function result"
     )
 
